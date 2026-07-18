@@ -64,7 +64,7 @@
   .hero.gone{opacity:0;transform:translateY(-22px);max-height:0;pointer-events:none}
   .hero .big{font-family:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif;
     font-size:clamp(50px,7vw,96px);font-weight:600;letter-spacing:-.045em;line-height:1;
-    background:linear-gradient(180deg,#909298 10%,#74767c 55%,#5a5c62 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    background:linear-gradient(180deg,#5a5a5c 6%,#464648 52%,#3b3b3b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
   .hero .big em{font-style:normal;color:var(--accent);-webkit-text-fill-color:var(--accent)}
   .hero .sub{margin-top:13px;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim);font-weight:500}
   @keyframes rise{from{opacity:0;transform:translateY(26px)}}
@@ -85,18 +85,18 @@
   .card.denied::before{background:conic-gradient(from var(--bang),transparent 0 72%,rgba(255,95,95,.55) 86%,transparent 100%)}
 
   form{display:flex;flex-direction:column;gap:12px}
-  .field{display:flex;align-items:center;background:#b4b6bc;border:1px solid transparent;border-radius:12px;padding:0 15px;transition:.2s}
-  .field:focus-within{background:#c0c2c8}
+  .field{display:flex;align-items:center;background:rgba(238,240,243,.05);border:1px solid var(--cardline);border-radius:12px;padding:0 15px;transition:.2s}
+  .field:focus-within{background:rgba(238,240,243,.09);border-color:rgba(255,255,255,.2)}
   .field.error{border-color:rgba(255,95,95,.6)}
   .field.error .k{color:var(--red)}
   .shake{animation:shake .34s cubic-bezier(.36,.07,.19,.97)}
   @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
-  .field .k{color:#4b4d52;font-size:14px;margin-right:11px}
-  input{flex:1;background:none;border:none;outline:none;color:#0b0b0d;caret-color:#0b0b0d;font-family:var(--sans);font-size:14.5px;padding:14px 0;letter-spacing:.14em}
-  input::placeholder{color:#595b60;letter-spacing:.12em}
-  button{background:#b4b6bc;color:#0b0b0d;border:none;border-radius:12px;padding:14px;
+  .field .k{color:var(--dim);font-size:14px;margin-right:11px}
+  input{flex:1;background:none;border:none;outline:none;color:var(--fg);caret-color:var(--fg);font-family:var(--sans);font-size:14.5px;padding:14px 0;letter-spacing:.14em}
+  input::placeholder{color:#7a7c82;letter-spacing:.12em}
+  button{background:rgba(238,240,243,.05);color:var(--fg);border:1px solid var(--cardline);border-radius:12px;padding:14px;
     font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;transition:.2s}
-  button:hover{background:#c9cbd1}
+  button:hover{background:rgba(238,240,243,.11);border-color:rgba(255,255,255,.16)}
   .foot-note{text-align:center;font-size:10.5px;letter-spacing:.08em;color:var(--faint);margin-top:16px}
 
   /* authorizing */
@@ -199,7 +199,7 @@
             <div class="field" id="field"><span class="k">&rsaquo;</span><input id="key" type="text" placeholder="Access key" autocomplete="off" oninput="document.getElementById('field').classList.remove('error')"></div>
             <button type="submit">Continue</button>
           </form>
-          <div class="foot-note">Access is granted by invitation</div>
+          <div class="foot-note">Invitation only</div>
         </div>
 
         <!-- AUTHORIZING -->
@@ -281,16 +281,16 @@
   })();
 
   /* ---------- origin lookup ---------- */
-  var DEMO={ip:"203.0.113.42",city:"London",cc:"GB",country:"United Kingdom",isp:"Zayo Bandwidth",lat:51.5074,lon:-0.1278};
+  var DEMO={ip:"203.0.113.42",city:"Boerne",cc:"US",region_code:"TX",country:"United States",isp:"Charter Communications",lat:29.7947,lon:-98.7320};
   function hex(n){var s="";for(var i=0;i<n;i++)s+="0123456789ABCDEF"[Math.floor(Math.random()*16)];return s;}
   async function resolveIP(){
     try{var c=new AbortController();setTimeout(function(){c.abort();},1500);
       var r=await fetch("https://ipwho.is/",{signal:c.signal});var d=await r.json();
-      if(d&&d.success!==false)return{ip:d.ip,city:d.city,cc:d.country_code,country:d.country,isp:(d.connection&&d.connection.isp)||"—",lat:d.latitude,lon:d.longitude};
+      if(d&&d.success!==false)return{ip:d.ip,city:d.city,cc:d.country_code,region_code:d.region_code,country:d.country,isp:(d.connection&&d.connection.isp)||"—",lat:d.latitude,lon:d.longitude};
     }catch(e){}
     return DEMO;
   }
-  function fmtLoc(d){var s=(d.city?d.city+", ":"")+(d.cc||d.country||"");return s||"Unknown";}
+  function fmtLoc(d){var sub=(d.cc==="US"&&d.region_code)?d.region_code:(d.cc||d.country||"");var s=(d.city?d.city+(sub?", "+sub:""):sub);return s||"Unknown";}
   function fmtCoords(la,lo){
     return Math.abs(la).toFixed(4)+"° "+(la>=0?"N":"S")+" · "+Math.abs(lo).toFixed(4)+"° "+(lo>=0?"E":"W");
   }
@@ -553,20 +553,57 @@
 
   function showRow(i){var el=document.querySelector('.row[data-i="'+i+'"]');if(el)el.classList.add('show');}
 
-  function reverseToGate(){
-    if(E.reversing)return;E.reversing=true;
+  function coverParams(){
+    var vw=window.innerWidth,vh=window.innerHeight;
+    var cw=Math.min(vw*0.94,596),ch=Math.min(vh*0.86,580);
+    var R=Math.sqrt(cw*cw+ch*ch)/2*1.06;
+    return {cx:vw/2,cy:vh/2,R:R};
+  }
+  function swapToAuth(data){
+    document.getElementById('hero').classList.add('gone');
+    document.getElementById('gate').style.display='none';
+    document.getElementById('auth').classList.add('on');
+    document.getElementById('card').classList.add('wide');
+    document.getElementById('hstat').textContent='Authorizing';
+    document.getElementById('fkey').textContent='Session '+hex(4)+'-'+hex(4);
+    document.getElementById('sid').textContent=hex(6);
+  }
+  function startAuthTimeline(data){
+    var t=140;[0,1,2,3,4].forEach(function(i){setTimeout(function(){showRow(i);},t+=470);});
+    setTimeout(function(){
+      document.getElementById('ip').textContent=data.ip;
+      document.getElementById('loc').textContent=fmtLoc(data);
+      document.getElementById('isp').textContent=data.isp||"\u2014";
+    },1000);
+    setTimeout(function(){document.getElementById('bar').style.width='40%';},1300);
+    setTimeout(function(){document.getElementById('bar').style.width='72%';},2500);
+    setTimeout(function(){
+      var bar=document.getElementById('bar');bar.style.width='82%';bar.classList.add('deny');
+      var v=document.getElementById('verdict');
+      v.classList.add('deny');v.textContent='Access denied \u2014 no matching invitation';
+      document.getElementById('hstat').textContent='Denied';
+      document.getElementById('hbadge').classList.add('denied');
+      document.getElementById('card').classList.add('denied');
+      E.denyT=1;
+      if(pkRAF){cancelAnimationFrame(pkRAF);pkRAF=null;}
+      document.getElementById('pk').setAttribute('opacity','0');
+      document.getElementById('arc').style.stroke='rgba(255,95,95,.45)';
+      document.querySelectorAll('.row .ic.wait').forEach(function(x){x.style.color='var(--red)';x.style.animation='none';x.textContent='\u00d7';});
+      setTimeout(reverseToGate,3000);
+    },4100);
+  }
+  function resetAuthUI(){
     document.getElementById('gset').classList.remove('on');
     if(pkRAF){cancelAnimationFrame(pkRAF);pkRAF=null;}
-    var pk=document.getElementById('pk');pk.setAttribute('opacity','0');
+    document.getElementById('pk').setAttribute('opacity','0');
     var arc=document.getElementById('arc');
     arc.style.transition='none';arc.style.strokeDasharray='';arc.style.strokeDashoffset='';arc.style.stroke='';
     arc.removeAttribute('d');
     document.getElementById('relay').setAttribute('opacity','0');
-    if(E.ok&&E.detach)E.detach();
-    document.getElementById('auth').classList.remove('on');
-    document.getElementById('gate').style.display='';
     var card=document.getElementById('card');
     card.classList.remove('wide');card.classList.remove('denied');
+    document.getElementById('auth').classList.remove('on');
+    document.getElementById('gate').style.display='';
     document.getElementById('hero').classList.remove('gone');
     document.getElementById('key').value='';
     document.querySelectorAll('.row').forEach(function(r){r.classList.remove('show');});
@@ -582,14 +619,27 @@
     document.getElementById('hbadge').classList.remove('denied');
     document.getElementById('fkey').textContent='Node 00';
     E.denyT=0;
+  }
+  function reverseToGate(){
+    if(E.reversing)return;E.reversing=true;
+    document.getElementById('gset').classList.remove('on');
+    if(pkRAF){cancelAnimationFrame(pkRAF);pkRAF=null;}
     function finish(){document.body.classList.remove('flight');E.busy=false;E.reversing=false;}
-    if(E.ok){
-      E.cv.style.zIndex='10';
-      E.tween={t0:performance.now(),dur:REDUCED?0:1700,endMode:'hero',
-        from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:0,hF:0},
-        to:E.heroTo(),
-        done:function(){E.cv.style.zIndex='';finish();}};
-    }else{finish();}
+    if(!E.ok){resetAuthUI();finish();return;}
+    document.body.classList.add('flight');
+    if(E.detach)E.detach();
+    E.cv.style.zIndex='10';
+    var cp=coverParams();
+    E.tween={t0:performance.now(),dur:REDUCED?0:850,endMode:'cover',
+      from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:0,hF:E.heroF},
+      to:{cx:cp.cx,cy:cp.cy,R:cp.R,rot:E.rot+0.45,tilt:E.tilt,spd:0,hF:1},
+      done:function(){
+        resetAuthUI();
+        E.tween={t0:performance.now(),dur:REDUCED?0:1400,endMode:'hero',
+          from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:0,hF:1},
+          to:E.heroTo(),
+          done:function(){E.cv.style.zIndex='';finish();}};
+      }};
   }
   async function startAuth(){
     if(E.busy||E.reversing)return;
@@ -601,46 +651,26 @@
       return;
     }
     E.busy=true;
-    document.getElementById('hero').classList.add('gone');
-    document.body.classList.add('flight');
-    document.getElementById('gate').style.display='none';
-    document.getElementById('auth').classList.add('on');
-    document.getElementById('card').classList.add('wide');
-    document.getElementById('hstat').textContent='Authorizing';
-    document.getElementById('fkey').textContent='Session '+hex(4)+'-'+hex(4);
-    document.getElementById('sid').textContent=hex(6);
     var data=originData||await originReady;
     document.getElementById('hloc').textContent=fmtLoc(data);
-    // let the card finish widening, then fly the planet into the slot
-    setTimeout(function(){
-      dockEarth(data,function(){
-        showOverlay(data);
-        rollCoords(data,1000);
-      });
-      if(!E.ok){document.getElementById('gset').classList.add('on');rollCoords(data,1000);}
-    },620);
-    var t=140;[0,1,2,3,4].forEach(function(i){setTimeout(function(){showRow(i);},t+=470);});
-    setTimeout(function(){
-      document.getElementById('ip').textContent=data.ip;
-      document.getElementById('loc').textContent=fmtLoc(data);
-      document.getElementById('isp').textContent=data.isp||"—";
-    },1000);
-    setTimeout(function(){document.getElementById('bar').style.width='40%';},1300);
-    setTimeout(function(){document.getElementById('bar').style.width='72%';},2500);
-    setTimeout(function(){
-      var bar=document.getElementById('bar');bar.style.width='82%';bar.classList.add('deny');
-      var v=document.getElementById('verdict');
-      v.classList.add('deny');v.textContent='Access denied — no matching invitation';
-      document.getElementById('hstat').textContent='Denied';
-      document.getElementById('hbadge').classList.add('denied');
-      document.getElementById('card').classList.add('denied');
-      E.denyT=1;
-      if(pkRAF)cancelAnimationFrame(pkRAF);
-      document.getElementById('pk').setAttribute('opacity','0');
-      document.getElementById('arc').style.stroke='rgba(255,95,95,.45)';
-      document.querySelectorAll('.row .ic.wait').forEach(function(x){x.style.color='var(--red)';x.style.animation='none';x.textContent='×';});
-      setTimeout(reverseToGate,3400);
-    },4100);
+    if(!E.ok){
+      swapToAuth(data);
+      document.getElementById('gset').classList.add('on');
+      rollCoords(data,1000);
+      startAuthTimeline(data);
+      return;
+    }
+    document.body.classList.add('flight');
+    E.cv.style.zIndex='10';
+    var cp=coverParams();
+    E.tween={t0:performance.now(),dur:REDUCED?0:900,endMode:'cover',
+      from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:E.spd,hF:E.heroF},
+      to:{cx:cp.cx,cy:cp.cy,R:cp.R,rot:E.rot+0.45,tilt:E.tilt,spd:0,hF:1},
+      done:function(){
+        swapToAuth(data);
+        startAuthTimeline(data);
+        dockEarth(data,function(){showOverlay(data);rollCoords(data,1000);});
+      }};
   }
 </script>
 </body>
