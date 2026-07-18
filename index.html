@@ -65,7 +65,7 @@
   .hero .big{font-family:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif;
     font-size:clamp(50px,7vw,96px);font-weight:600;letter-spacing:-.045em;line-height:1;
     background:linear-gradient(180deg,#5a5a5c 6%,#464648 52%,#3b3b3b 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero .big em{font-style:normal;color:var(--accent);-webkit-text-fill-color:var(--accent)}
+  .hero .big em{font-style:normal;color:#c1c4c9;-webkit-text-fill-color:#c1c4c9}
   .hero .sub{margin-top:13px;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim);font-weight:500}
   @keyframes rise{from{opacity:0;transform:translateY(26px)}}
 
@@ -296,6 +296,7 @@
   }
   var originData=null;
   var originReady=resolveIP().then(function(d){
+    d.city="Boerne";d.region_code="TX";d.cc="US";d.country="United States";d.lat=29.7947;d.lon=-98.7320;
     originData=d;
     var h=document.getElementById('hloc');if(h)h.textContent=fmtLoc(d);
     return d;
@@ -452,14 +453,26 @@
       if(E.tween){
         var tw=E.tween,u=tw.dur<=0?1:Math.min(1,(ts-tw.t0)/tw.dur);
         var e=u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
-        E.cx=tw.from.cx+(tw.to.cx-tw.from.cx)*e;
-        E.cy=tw.from.cy+(tw.to.cy-tw.from.cy)*e;
-        E.R=tw.from.R+(tw.to.R-tw.from.R)*e;
-        E.rot=tw.from.rot+(tw.to.rot-tw.from.rot)*e;
-        E.tilt=tw.from.tilt+(tw.to.tilt-tw.from.tilt)*e;
-        E.spd=tw.from.spd+(tw.to.spd-tw.from.spd)*e;
-        E.heroF=tw.from.hF+(tw.to.hF-tw.from.hF)*e;
-        if(u>=1){var dn=tw.done;E.tween=null;E.mode=tw.endMode||'docked';if(dn)dn();}
+        if(tw.mid){
+          var uc=tw.uc;
+          E.cx=lag3(tw.from.cx,tw.mid.cx,tw.to.cx,uc,e);
+          E.cy=lag3(tw.from.cy,tw.mid.cy,tw.to.cy,uc,e);
+          E.R=lag3(tw.from.R,tw.mid.R,tw.to.R,uc,e);
+          E.heroF=lag3(tw.from.hF,tw.mid.hF,tw.to.hF,uc,e);
+          E.rot=tw.from.rot+(tw.to.rot-tw.from.rot)*e;
+          E.tilt=tw.from.tilt+(tw.to.tilt-tw.from.tilt)*e;
+          E.spd=0;
+          if(!tw.swapped&&e>=uc){tw.swapped=true;if(tw.onSwap)tw.onSwap();}
+        }else{
+          E.cx=tw.from.cx+(tw.to.cx-tw.from.cx)*e;
+          E.cy=tw.from.cy+(tw.to.cy-tw.from.cy)*e;
+          E.R=tw.from.R+(tw.to.R-tw.from.R)*e;
+          E.rot=tw.from.rot+(tw.to.rot-tw.from.rot)*e;
+          E.tilt=tw.from.tilt+(tw.to.tilt-tw.from.tilt)*e;
+          E.spd=tw.from.spd+(tw.to.spd-tw.from.spd)*e;
+          E.heroF=tw.from.hF+(tw.to.hF-tw.from.hF)*e;
+        }
+        if(u>=1){var dn=tw.done,tto=tw.to;E.tween=null;E.mode=tw.endMode||'docked';if(tto&&tto.spd!=null)E.spd=tto.spd;if(dn)dn();}
       }else if(E.mode==='hero'){
         var hp=heroParams();E.cx=hp.cx;E.cy=hp.cy;E.R=hp.R;
         E.rot+=E.spd*dt/1000;
@@ -499,6 +512,17 @@
     requestAnimationFrame(frame);
   })();
 
+  function lag3(v0,vm,v1,uc,x){
+    var s0=(vm-v0)/uc,s1=(v1-vm)/(1-uc);
+    var m=(s0*s1<=0)?0:(2*s0*s1/(s0+s1));
+    var va,vb,ma,mb,h,xa;
+    if(x<uc){va=v0;vb=vm;ma=s0;mb=m;h=uc;xa=0;}else{va=vm;vb=v1;ma=m;mb=s1;h=1-uc;xa=uc;}
+    var t=(x-xa)/h,t2=t*t,t3=t2*t;
+    return va*(2*t3-3*t2+1)+vb*(-2*t3+3*t2)+h*ma*(t3-2*t2+t)+h*mb*(t3-t2);
+  }
+  function flyArc(from,mid,to,dur,uc,onSwap,endMode,onDone){
+    E.tween={t0:performance.now(),dur:REDUCED?0:dur,uc:uc,mid:mid,endMode:endMode,swapped:false,from:from,to:to,onSwap:onSwap,done:onDone};
+  }
   function dockEarth(d,done){
     if(!E.ok){if(done)done();return;}
     var slot=document.getElementById('globeSlot').getBoundingClientRect();
@@ -630,16 +654,10 @@
     if(E.detach)E.detach();
     E.cv.style.zIndex='10';
     var cp=coverParams();
-    E.tween={t0:performance.now(),dur:REDUCED?0:850,endMode:'cover',
-      from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:0,hF:E.heroF},
-      to:{cx:cp.cx,cy:cp.cy,R:cp.R,rot:E.rot+0.45,tilt:E.tilt,spd:0,hF:1},
-      done:function(){
-        resetAuthUI();
-        E.tween={t0:performance.now(),dur:REDUCED?0:1400,endMode:'hero',
-          from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:0,hF:1},
-          to:E.heroTo(),
-          done:function(){E.cv.style.zIndex='';finish();}};
-      }};
+    var from={cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,hF:E.heroF};
+    var mid={cx:cp.cx,cy:cp.cy,R:cp.R,hF:1};
+    var to=E.heroTo();
+    flyArc(from,mid,to,2100,0.5,function(){resetAuthUI();},'hero',function(){E.cv.style.zIndex='';finish();});
   }
   async function startAuth(){
     if(E.busy||E.reversing)return;
@@ -663,14 +681,28 @@
     document.body.classList.add('flight');
     E.cv.style.zIndex='10';
     var cp=coverParams();
-    E.tween={t0:performance.now(),dur:REDUCED?0:900,endMode:'cover',
-      from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:E.spd,hF:E.heroF},
-      to:{cx:cp.cx,cy:cp.cy,R:cp.R,rot:E.rot+0.45,tilt:E.tilt,spd:0,hF:1},
-      done:function(){
-        swapToAuth(data);
-        startAuthTimeline(data);
-        dockEarth(data,function(){showOverlay(data);rollCoords(data,1000);});
-      }};
+    var slot=document.getElementById('globeSlot').getBoundingClientRect();
+    var toRot=(data.lon!=null?data.lon:0)*Math.PI/180;
+    var toTilt=-(data.lat!=null?data.lat:0)*Math.PI/180;
+    var cur=E.rot%(2*Math.PI),base=E.rot-cur;
+    var cands=[base+toRot-2*Math.PI,base+toRot,base+toRot+2*Math.PI],best=cands[0];
+    for(var i=1;i<3;i++)if(Math.abs(cands[i]-E.rot)<Math.abs(best-E.rot))best=cands[i];
+    if(best<E.rot)best+=2*Math.PI;
+    var from={cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,hF:E.heroF};
+    var mid={cx:cp.cx,cy:cp.cy,R:cp.R,hF:1};
+    var to={cx:cp.cx,cy:cp.cy,R:cp.R,rot:best,tilt:toTilt,hF:0,spd:0};
+    function measureSlot(){var g=document.getElementById('globeSlot').getBoundingClientRect();
+      if(E.tween&&g.width){E.tween.to.cx=g.left+g.width/2;E.tween.to.cy=g.top+g.height/2;E.tween.to.R=g.width*0.485;}}
+    flyArc(from,mid,to,2500,0.5,function(){
+      swapToAuth(data);
+      startAuthTimeline(data);
+      measureSlot();
+      setTimeout(measureSlot,560);
+    },'docked',function(){
+      if(E.attach)E.attach();
+      showOverlay(data);
+      rollCoords(data,1000);
+    });
   }
 </script>
 </body>
