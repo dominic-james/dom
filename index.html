@@ -1,11 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="" content="" />
-  <meta charset="utf-8">
-  <title></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="">
-  <script>window.location.href='https://wedding.dom.life'</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Authorized access only.">
+<meta name="theme-color" content="#0a0a0c">
+<meta property="og:title" content="dom.">
+<meta property="og:description" content="Authorized access only.">
+<title>dom.</title>
+<style>
+  :root{
+    --bg:#0a0a0c; --fg:#f1f1f3; --dim:#8a8a93; --faint:#5c5c65; --accent:#4ade80; --red:#ff5f5f;
+    --cardbg:rgba(22,22,27,.55); --cardline:rgba(255,255,255,.08); --inset:rgba(0,0,0,.28);
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Inter,Roboto,Arial,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);min-height:100vh;
+    display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;position:relative;overflow:hidden}
+  /* clean background: soft glow, no grid */
+  .glow{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(62% 55% at 50% 38%,rgba(74,222,128,.07),transparent 60%),
+      radial-gradient(90% 90% at 50% 50%,rgba(255,255,255,.015),transparent 55%),
+      radial-gradient(120% 120% at 50% 120%,rgba(0,0,0,.55),transparent 60%)}
+  .wrap{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;padding:34px clamp(26px,5vw,60px)}
+  header,footer{display:flex;justify-content:space-between;align-items:center;
+    font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);font-weight:500}
+  .status{display:flex;align-items:center;gap:9px;transition:color .3s}
+  .status.denied{color:var(--red)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2.4s infinite}
+  .status.denied .dot{background:var(--red);animation:none;box-shadow:0 0 8px rgba(255,95,95,.6)}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 8px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+  main{flex:1;display:flex;align-items:center;justify-content:center}
+
+  /* clean frosted card */
+  .card{position:relative;width:min(92vw,428px);background:var(--cardbg);
+    border:1px solid var(--cardline);border-radius:22px;padding:40px 36px;
+    backdrop-filter:blur(22px) saturate(130%);-webkit-backdrop-filter:blur(22px) saturate(130%);
+    box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.05);
+    transition:width .55s cubic-bezier(.4,0,.2,1)}
+  .card.wide{width:min(94vw,596px)}
+
+  /* gate */
+  .brandmark{width:48px;height:48px;margin:0 auto 22px;border:1px solid var(--cardline);border-radius:14px;
+    display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.03);position:relative}
+  .brandmark::before{content:"";width:19px;height:19px;border-radius:50%;
+    border:2px solid var(--accent);border-right-color:transparent;border-bottom-color:transparent;transform:rotate(20deg)}
+  .mark{font-size:32px;font-weight:600;letter-spacing:-.02em;text-align:center}
+  .mark span{color:var(--accent)}
+  .hint{text-align:center;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:10px;font-weight:500}
+  form{display:flex;flex-direction:column;gap:12px;margin-top:28px}
+  .field{display:flex;align-items:center;background:var(--inset);border:1px solid var(--cardline);border-radius:12px;padding:0 15px;transition:.2s}
+  .field:focus-within{border-color:rgba(255,255,255,.2)}
+  .field .k{color:var(--faint);font-size:14px;margin-right:11px}
+  input{flex:1;background:none;border:none;outline:none;color:var(--fg);font-family:var(--sans);font-size:14.5px;padding:15px 0;letter-spacing:.14em}
+  input::placeholder{color:#55555e;letter-spacing:.12em}
+  button{margin-top:2px;background:var(--fg);color:#0a0a0c;border:none;border-radius:12px;padding:15px;
+    font-family:var(--sans);font-size:13.5px;font-weight:600;letter-spacing:.02em;cursor:pointer;transition:.2s}
+  button:hover{background:var(--accent)}
+  .foot-note{text-align:center;font-size:11px;letter-spacing:.06em;color:var(--faint);margin-top:22px}
+
+  /* authorizing */
+  .auth{display:none;flex-direction:column;gap:24px}
+  .auth.on{display:flex}
+  .scope-row{display:flex;gap:30px;align-items:center}
+  .scope{position:relative;width:170px;height:170px;flex:none}
+  .scope .ring{position:absolute;border:1px solid rgba(255,255,255,.08);border-radius:50%}
+  .r1{inset:0}.r2{inset:24px}.r3{inset:55px}.r4{inset:79px}
+  .cross{position:absolute;background:rgba(255,255,255,.05)}
+  .cx{left:0;right:0;top:50%;height:1px}.cy{top:0;bottom:0;left:50%;width:1px}
+  .sweep{position:absolute;inset:0;border-radius:50%;overflow:hidden}
+  .sweep::before{content:"";position:absolute;inset:0;border-radius:50%;
+    background:conic-gradient(from 0deg,rgba(74,222,128,.42),rgba(74,222,128,0) 42%,transparent 100%);
+    animation:spin 1.5s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .blip{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+  .b1{left:63%;top:37%}.b2{left:41%;top:61%}.b3{left:56%;top:70%}
+  .core{position:absolute;left:50%;top:50%;width:7px;height:7px;border-radius:50%;transform:translate(-50%,-50%);background:var(--accent);box-shadow:0 0 12px var(--accent)}
+  .log{flex:1;display:flex;flex-direction:column;gap:11px;font-size:13.5px;min-width:0}
+  .row{display:flex;align-items:center;gap:11px;color:var(--dim);opacity:0;transform:translateY(3px);transition:.35s}
+  .row.show{opacity:1;transform:none}
+  .row .ic{width:14px;text-align:center;color:var(--accent);font-size:12px}
+  .row .ic.wait{color:var(--faint)}
+  .bar{width:100%;height:3px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .5s ease}
+  .bar i.deny{background:var(--red)}
+  .origin{width:100%;border:1px solid var(--cardline);border-radius:14px;padding:18px 20px;background:var(--inset);
+    display:grid;grid-template-columns:1fr 1fr;gap:16px 22px}
+  .origin .l{color:var(--faint);letter-spacing:.12em;text-transform:uppercase;font-size:10px;margin-bottom:5px;font-weight:500}
+  .origin .v{color:var(--fg);font-size:14px;font-variant-numeric:tabular-nums}
+  .origin .v.acc{color:var(--accent)}
+  .verdict{width:100%;text-align:center;font-size:12.5px;letter-spacing:.03em;
+    padding:14px;border-radius:12px;border:1px solid var(--cardline);background:rgba(74,222,128,.06);color:var(--accent);transition:.4s;font-weight:500}
+  .verdict.deny{border-color:rgba(255,95,95,.28);background:rgba(255,95,95,.07);color:var(--red)}
+  a{color:inherit;text-decoration:none}
+
+  @media(max-width:620px){ .scope-row{flex-direction:column} .scope{margin:0 auto} .origin{grid-template-columns:1fr} }
+</style>
 </head>
+<body>
+  <div class="glow"></div>
+  <div class="wrap">
+    <header>
+      <div>DOM</div>
+      <div class="status" id="hbadge"><span class="dot"></span> <span id="hstat">Secure</span></div>
+    </header>
+
+    <main>
+      <div class="card" id="card">
+        <!-- GATE -->
+        <div id="gate">
+          <div class="brandmark"></div>
+          <div class="mark">dom<span>.</span></div>
+          <div class="hint">Authorized access only</div>
+          <form onsubmit="startAuth();return false">
+            <div class="field"><span class="k">&rsaquo;</span><input id="key" type="text" placeholder="Access key" autocomplete="off"></div>
+            <button type="submit">Continue</button>
+          </form>
+          <div class="foot-note">Access is granted by invitation</div>
+        </div>
+
+        <!-- AUTHORIZING -->
+        <div class="auth" id="auth">
+          <div class="scope-row">
+            <div class="scope">
+              <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="ring r4"></div>
+              <div class="cross cx"></div><div class="cross cy"></div>
+              <div class="sweep"></div>
+              <div class="blip b1"></div><div class="blip b2"></div><div class="blip b3"></div><div class="core"></div>
+            </div>
+            <div class="log" id="log">
+              <div class="row" data-i="0"><span class="ic">&#10003;</span><span>Establishing secure channel</span></div>
+              <div class="row" data-i="1"><span class="ic">&#10003;</span><span>Fingerprinting device</span></div>
+              <div class="row" data-i="2"><span class="ic">&#10003;</span><span>Resolving origin</span></div>
+              <div class="row" data-i="3"><span class="ic wait">&#9675;</span><span>Cross-referencing registry</span></div>
+              <div class="row" data-i="4"><span class="ic wait">&#9675;</span><span>Validating key signature</span></div>
+            </div>
+          </div>
+          <div class="bar"><i id="bar"></i></div>
+          <div class="origin">
+            <div><div class="l">Origin IP</div><div class="v acc" id="ip">&mdash;</div></div>
+            <div><div class="l">Location</div><div class="v" id="loc">Resolving&hellip;</div></div>
+            <div><div class="l">Network</div><div class="v" id="isp">&mdash;</div></div>
+            <div><div class="l">Session</div><div class="v" id="sid">&mdash;</div></div>
+          </div>
+          <div class="verdict" id="verdict">Verifying credentials&hellip;</div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div id="fkey">DOM &frasl;&frasl; Node 00</div>
+      <div>&copy; 2026</div>
+    </footer>
+  </div>
+
+<script>
+  var DEMO={ip:"203.0.113.42",city:"London",cc:"GB",country:"United Kingdom",isp:"Zayo Bandwidth"};
+  function hex(n){var s="";for(var i=0;i<n;i++)s+="0123456789ABCDEF"[Math.floor(Math.random()*16)];return s;}
+  async function resolveIP(){
+    try{var c=new AbortController();setTimeout(function(){c.abort();},1500);
+      var r=await fetch("https://ipwho.is/",{signal:c.signal});var d=await r.json();
+      if(d&&d.success!==false)return{ip:d.ip,city:d.city,cc:d.country_code,country:d.country,isp:(d.connection&&d.connection.isp)||"—"};
+    }catch(e){}
+    return DEMO;
+  }
+  function showRow(i){var el=document.querySelector('.row[data-i="'+i+'"]');if(el)el.classList.add('show');}
+  async function startAuth(){
+    document.getElementById('gate').style.display='none';
+    document.getElementById('auth').classList.add('on');
+    document.getElementById('card').classList.add('wide');
+    document.getElementById('hstat').textContent='Authorizing';
+    document.getElementById('fkey').textContent='Session '+hex(4)+'-'+hex(4);
+    document.getElementById('sid').textContent=hex(6);
+    var data=await resolveIP();
+    var t=0;[0,1,2,3,4].forEach(function(i){setTimeout(function(){showRow(i);},t+=460);});
+    setTimeout(function(){
+      document.getElementById('ip').textContent=data.ip;
+      document.getElementById('loc').textContent=(data.city?data.city+", ":"")+(data.cc||data.country||"");
+      document.getElementById('isp').textContent=data.isp||"—";
+    },900);
+    setTimeout(function(){document.getElementById('bar').style.width='45%';},1200);
+    setTimeout(function(){document.getElementById('bar').style.width='75%';},2200);
+    setTimeout(function(){
+      var bar=document.getElementById('bar');bar.style.width='82%';bar.classList.add('deny');
+      var v=document.getElementById('verdict');
+      v.classList.add('deny');v.textContent='Access denied — no matching invitation';
+      document.getElementById('hstat').textContent='Denied';
+      document.getElementById('hbadge').classList.add('denied');
+      document.querySelectorAll('.row .ic.wait').forEach(function(x){x.style.color='var(--red)';x.textContent='×';});
+    },3400);
+  }
+</script>
+</body>
 </html>
