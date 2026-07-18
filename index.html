@@ -64,7 +64,7 @@
   .hero.gone{opacity:0;transform:translateY(-22px);max-height:0;pointer-events:none}
   .hero .big{font-family:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif;
     font-size:clamp(50px,7vw,96px);font-weight:600;letter-spacing:-.045em;line-height:1;
-    background:linear-gradient(180deg,#dfe0e3 10%,#b4b6bc 55%,#84868d 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    background:linear-gradient(180deg,#909298 10%,#74767c 55%,#5a5c62 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
   .hero .big em{font-style:normal;color:var(--accent);-webkit-text-fill-color:var(--accent)}
   .hero .sub{margin-top:13px;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim);font-weight:500}
   @keyframes rise{from{opacity:0;transform:translateY(26px)}}
@@ -85,15 +85,15 @@
   .card.denied::before{background:conic-gradient(from var(--bang),transparent 0 72%,rgba(255,95,95,.55) 86%,transparent 100%)}
 
   form{display:flex;flex-direction:column;gap:12px}
-  .field{display:flex;align-items:center;background:var(--inset);border:1px solid var(--cardline);border-radius:12px;padding:0 15px;transition:.2s}
-  .field:focus-within{border-color:rgba(255,255,255,.22)}
+  .field{display:flex;align-items:center;background:#b4b6bc;border:1px solid transparent;border-radius:12px;padding:0 15px;transition:.2s}
+  .field:focus-within{background:#c0c2c8}
   .field.error{border-color:rgba(255,95,95,.6)}
   .field.error .k{color:var(--red)}
   .shake{animation:shake .34s cubic-bezier(.36,.07,.19,.97)}
   @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
-  .field .k{color:var(--faint);font-size:14px;margin-right:11px}
-  input{flex:1;background:none;border:none;outline:none;color:var(--fg);font-family:var(--sans);font-size:14.5px;padding:14px 0;letter-spacing:.14em}
-  input::placeholder{color:#55555e;letter-spacing:.12em}
+  .field .k{color:#4b4d52;font-size:14px;margin-right:11px}
+  input{flex:1;background:none;border:none;outline:none;color:#0b0b0d;caret-color:#0b0b0d;font-family:var(--sans);font-size:14.5px;padding:14px 0;letter-spacing:.14em}
+  input::placeholder{color:#595b60;letter-spacing:.12em}
   button{background:#b4b6bc;color:#0b0b0d;border:none;border-radius:12px;padding:14px;
     font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;transition:.2s}
   button:hover{background:#c9cbd1}
