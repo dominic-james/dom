@@ -16,8 +16,8 @@
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html,body{height:100%}
-  body{background:var(--bg);color:var(--fg);font-family:var(--sans);min-height:100vh;
-    display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;position:relative;overflow:hidden}
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);min-height:100vh;min-height:100dvh;
+    display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;position:relative;overflow-x:hidden}
   /* clean background: soft glow, no grid */
   .glow{position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
@@ -53,6 +53,10 @@
   form{display:flex;flex-direction:column;gap:12px;margin-top:28px}
   .field{display:flex;align-items:center;background:var(--inset);border:1px solid var(--cardline);border-radius:12px;padding:0 15px;transition:.2s}
   .field:focus-within{border-color:rgba(255,255,255,.2)}
+  .field.error{border-color:rgba(255,95,95,.6)}
+  .field.error .k{color:var(--red)}
+  .shake{animation:shake .34s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
   .field .k{color:var(--faint);font-size:14px;margin-right:11px}
   input{flex:1;background:none;border:none;outline:none;color:var(--fg);font-family:var(--sans);font-size:14.5px;padding:15px 0;letter-spacing:.14em}
   input::placeholder{color:#55555e;letter-spacing:.12em}
@@ -96,7 +100,30 @@
   .verdict.deny{border-color:rgba(255,95,95,.28);background:rgba(255,95,95,.07);color:var(--red)}
   a{color:inherit;text-decoration:none}
 
-  @media(max-width:620px){ .scope-row{flex-direction:column} .scope{margin:0 auto} .origin{grid-template-columns:1fr} }
+  @media(max-width:600px){
+    .wrap{padding:20px 18px}
+    .card{padding:28px 22px;border-radius:18px}
+    .brandmark{width:42px;height:42px;margin-bottom:16px}
+    .mark{font-size:27px}
+    .hint{margin-top:8px}
+    form{margin-top:22px}
+    .foot-note{margin-top:16px}
+    .auth{gap:16px}
+    .scope-row{gap:14px}
+    .scope{width:104px;height:104px}
+    .scope .r2{inset:15px}.scope .r3{inset:34px}.scope .r4{inset:49px}
+    .log{gap:8px;font-size:11.5px}
+    .bar{height:2px}
+    .origin{padding:14px 15px;gap:12px 14px}
+    .origin .v{font-size:12.5px}
+    .verdict{padding:11px;font-size:11.5px}
+    header,footer{font-size:10px}
+  }
+  @media(max-height:560px){
+    .scope{width:88px;height:88px}
+    .scope .r2{inset:12px}.scope .r3{inset:28px}.scope .r4{inset:40px}
+    .auth{gap:12px}.card{padding:22px}
+  }
 </style>
 </head>
 <body>
@@ -115,7 +142,7 @@
           <div class="mark">dom<span>.</span></div>
           <div class="hint">Authorized access only</div>
           <form onsubmit="startAuth();return false">
-            <div class="field"><span class="k">&rsaquo;</span><input id="key" type="text" placeholder="Access key" autocomplete="off"></div>
+            <div class="field" id="field"><span class="k">&rsaquo;</span><input id="key" type="text" placeholder="Access key" autocomplete="off" oninput="document.getElementById('field').classList.remove('error')"></div>
             <button type="submit">Continue</button>
           </form>
           <div class="foot-note">Access is granted by invitation</div>
@@ -168,6 +195,13 @@
   }
   function showRow(i){var el=document.querySelector('.row[data-i="'+i+'"]');if(el)el.classList.add('show');}
   async function startAuth(){
+    var keyEl=document.getElementById('key'),field=document.getElementById('field');
+    if(!keyEl.value.trim()){
+      field.classList.add('error');
+      field.classList.remove('shake');void field.offsetWidth;field.classList.add('shake');
+      keyEl.focus();
+      return;
+    }
     document.getElementById('gate').style.display='none';
     document.getElementById('auth').classList.add('on');
     document.getElementById('card').classList.add('wide');
