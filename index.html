@@ -10,7 +10,7 @@
 <title>dom.</title>
 <style>
   :root{
-    --bg:#050507; --fg:#f1f1f3; --dim:#8a8a93; --faint:#5c5c65; --accent:#4ade80; --red:#ff5f5f;
+    --bg:#050507; --fg:#f1f1f3; --dim:#8a8a93; --faint:#5c5c65; --accent:#eef0f3; --red:#ff5f5f;
     --cardbg:rgba(18,18,23,.55); --cardline:rgba(255,255,255,.09); --inset:rgba(0,0,0,.3);
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Inter,Roboto,Arial,sans-serif;
   }
@@ -21,15 +21,15 @@
 
   .sky{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,#040406 0%,#050507 60%,#07090b 100%)}
   .hglow{position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity 1.8s ease;
-    background:radial-gradient(95% 60% at 50% 116%,rgba(210,235,240,.10),rgba(120,200,190,.05) 45%,transparent 62%)}
+    background:radial-gradient(95% 60% at 50% 116%,rgba(210,235,240,.10),rgba(195,210,222,.05) 45%,transparent 62%)}
   body.flight .hglow{opacity:0}
   .stars{position:fixed;inset:0;z-index:0;pointer-events:none;transform-origin:50% 42%;will-change:transform;transition:none}
   .stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#dfe8e3;animation:tw 4s ease-in-out infinite}
   @keyframes tw{0%,100%{opacity:.10}50%{opacity:.8}}
-  .sat{position:fixed;z-index:0;left:-4vw;top:30vh;width:3px;height:3px;border-radius:50%;background:#eafff2;
-    box-shadow:0 0 6px rgba(160,255,200,.9);animation:cross 26s linear infinite;pointer-events:none}
+  .sat{position:fixed;z-index:0;left:-4vw;top:30vh;width:3px;height:3px;border-radius:50%;background:#edf1f6;
+    box-shadow:0 0 6px rgba(232,240,248,.9);animation:cross 26s linear infinite;pointer-events:none}
   .sat::after{content:"";position:absolute;right:2px;top:1px;width:46px;height:1px;
-    background:linear-gradient(90deg,transparent,rgba(160,255,200,.35));transform:translateY(-50%)}
+    background:linear-gradient(90deg,transparent,rgba(232,240,248,.35));transform:translateY(-50%)}
   @keyframes cross{0%{transform:translate(0,0)}100%{transform:translate(112vw,-14vh)}}
   @media (prefers-reduced-motion: reduce){.sat{display:none}.stars i{animation:none;opacity:.4}}
 
@@ -39,13 +39,13 @@
   .nogl .planetfb{display:block}
   .nogl canvas#earth{display:none}
   .planetfb .atmo{position:absolute;left:50%;top:8px;transform:translateX(-50%);width:3000px;height:3000px;border-radius:50%;
-    box-shadow:0 -14px 90px 10px rgba(74,222,128,.30),0 -50px 220px 40px rgba(74,222,128,.12)}
+    box-shadow:0 -14px 90px 10px rgba(200,218,235,.25),0 -50px 220px 40px rgba(200,218,235,.10)}
   .planetfb .planet{position:absolute;left:50%;top:14px;transform:translateX(-50%);width:3000px;height:3000px;border-radius:50%;
     background:
-      repeating-conic-gradient(from -90deg at 50% 50%,rgba(120,235,170,.10) 0 .12deg,transparent .12deg 4.8deg),
-      repeating-radial-gradient(circle at 50% 50%,transparent 0 118px,rgba(120,235,170,.10) 118px 119px),
-      radial-gradient(100% 100% at 50% 0%,rgba(74,222,128,.16),rgba(8,20,13,.9) 8%,#060a08 16%);
-    border-top:1px solid rgba(140,255,190,.5)}
+      repeating-conic-gradient(from -90deg at 50% 50%,rgba(200,212,224,.10) 0 .12deg,transparent .12deg 4.8deg),
+      repeating-radial-gradient(circle at 50% 50%,transparent 0 118px,rgba(200,212,224,.10) 118px 119px),
+      radial-gradient(100% 100% at 50% 0%,rgba(200,218,235,.14),rgba(8,20,13,.9) 8%,#060a08 16%);
+    border-top:1px solid rgba(215,228,240,.5)}
   body.flight canvas#earth{z-index:10}
   .vig{position:fixed;inset:0;z-index:2;pointer-events:none;background:radial-gradient(85% 80% at 50% 40%,transparent 55%,rgba(0,0,0,.5))}
 
@@ -56,7 +56,7 @@
   .status.denied{color:var(--red)}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2.4s infinite}
   .status.denied .dot{background:var(--red);animation:none;box-shadow:0 0 8px rgba(255,95,95,.6)}
-  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 8px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(238,240,243,.5)}70%{box-shadow:0 0 0 8px rgba(238,240,243,0)}100%{box-shadow:0 0 0 0 rgba(238,240,243,0)}}
   main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:30px;min-height:0}
 
   .hero{text-align:center;animation:rise 1.1s cubic-bezier(.2,.6,.2,1) both;
@@ -64,7 +64,7 @@
   .hero.gone{opacity:0;transform:translateY(-22px);max-height:0;pointer-events:none}
   .hero .big{font-family:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",Helvetica,Arial,sans-serif;
     font-size:clamp(50px,7vw,96px);font-weight:600;letter-spacing:-.045em;line-height:1;
-    background:linear-gradient(180deg,#fafafb 15%,#d6d7db 55%,#a6a8ae 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+    background:linear-gradient(180deg,#dfe0e3 10%,#b4b6bc 55%,#84868d 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
   .hero .big em{font-style:normal;color:var(--accent);-webkit-text-fill-color:var(--accent)}
   .hero .sub{margin-top:13px;font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--dim);font-weight:500}
   @keyframes rise{from{opacity:0;transform:translateY(26px)}}
@@ -78,7 +78,7 @@
     transition:width .55s cubic-bezier(.4,0,.2,1)}
   .card.wide{width:min(94vw,596px);padding:34px 32px}
   .card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;pointer-events:none;
-    background:conic-gradient(from var(--bang),transparent 0 72%,rgba(74,222,128,.6) 86%,transparent 100%);
+    background:conic-gradient(from var(--bang),transparent 0 72%,rgba(238,240,243,.45) 86%,transparent 100%);
     -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
     animation:beam 7s linear infinite}
   @keyframes beam{to{--bang:360deg}}
@@ -94,9 +94,9 @@
   .field .k{color:var(--faint);font-size:14px;margin-right:11px}
   input{flex:1;background:none;border:none;outline:none;color:var(--fg);font-family:var(--sans);font-size:14.5px;padding:14px 0;letter-spacing:.14em}
   input::placeholder{color:#55555e;letter-spacing:.12em}
-  button{background:#d3d4d8;color:#0b0b0d;border:none;border-radius:12px;padding:14px;
+  button{background:#b4b6bc;color:#0b0b0d;border:none;border-radius:12px;padding:14px;
     font-family:var(--sans);font-size:13.5px;font-weight:600;cursor:pointer;transition:.2s}
-  button:hover{background:#e6e7ea}
+  button:hover{background:#c9cbd1}
   .foot-note{text-align:center;font-size:10.5px;letter-spacing:.08em;color:var(--faint);margin-top:16px}
 
   /* authorizing */
@@ -107,17 +107,17 @@
   .globe{position:relative;width:180px;height:180px}
   .nogl .globe::before{content:"";position:absolute;inset:2%;border-radius:50%;
     background:radial-gradient(circle at 38% 30%,#12241a,#07100b 70%);border:1px solid rgba(120,235,170,.25)}
-  #ovl{position:fixed;z-index:12;pointer-events:none;left:0;top:0;width:180px;height:180px}
+  #ovl{position:absolute;inset:0;z-index:2;pointer-events:none}
   .gset{position:absolute;inset:0;opacity:0;transition:opacity .6s}
   .gset.on{opacity:1}
   .gset svg{width:100%;height:100%;overflow:visible}
   .g-orbit{fill:none;stroke:rgba(255,255,255,.14);stroke-width:.8;stroke-dasharray:2 5}
-  .g-sat{fill:#cfe9dc}
-  .g-sat2{fill:rgba(74,222,128,.9)}
-  .arc{fill:none;stroke:rgba(74,222,128,.6);stroke-width:1.2}
-  .node{fill:none;stroke:rgba(74,222,128,.85);stroke-width:1.1}
+  .g-sat{fill:#d9dde2}
+  .g-sat2{fill:rgba(238,240,243,.9)}
+  .arc{fill:none;stroke:rgba(238,240,243,.45);stroke-width:1.2}
+  .node{fill:none;stroke:rgba(238,240,243,.85);stroke-width:1.1}
   .nodecore{fill:var(--accent)}
-  .pk{fill:#eafff2}
+  .pk{fill:#eef2f6}
   .m-dot{fill:var(--accent)}
   .m-glow{fill:var(--accent);opacity:.16}
   .m-ring{fill:none;stroke:var(--accent);stroke-width:1.2;transform-box:fill-box;transform-origin:center;animation:beacon 2.2s ease-out infinite}
@@ -140,9 +140,9 @@
   .origin .v{color:var(--fg);font-size:14px;font-variant-numeric:tabular-nums}
   .origin .v.acc{color:var(--accent)}
   .verdict{position:relative;overflow:hidden;width:100%;text-align:center;font-size:12.5px;letter-spacing:.03em;
-    padding:13px;border-radius:12px;border:1px solid var(--cardline);background:rgba(74,222,128,.06);color:var(--accent);transition:.4s;font-weight:500}
+    padding:13px;border-radius:12px;border:1px solid var(--cardline);background:rgba(238,240,243,.05);color:var(--accent);transition:.4s;font-weight:500}
   .verdict:not(.deny)::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
-    background:linear-gradient(105deg,transparent 40%,rgba(74,222,128,.14) 50%,transparent 60%);animation:sheen 2.2s ease infinite}
+    background:linear-gradient(105deg,transparent 40%,rgba(238,240,243,.12) 50%,transparent 60%);animation:sheen 2.2s ease infinite}
   @keyframes sheen{to{transform:translateX(100%)}}
   .verdict.deny{border-color:rgba(255,95,95,.28);background:rgba(255,95,95,.07);color:var(--red)}
   a{color:inherit;text-decoration:none}
@@ -206,37 +206,7 @@
         <div class="auth" id="auth">
           <div class="scope-row">
             <div class="locate">
-              <div class="globe" id="globeSlot">
-              </div>
-              <div class="coords" id="coords"></div>
-            </div>
-            <div class="log" id="log">
-              <div class="row" data-i="0"><span class="ic">&#10003;</span><span>Establishing secure channel</span></div>
-              <div class="row" data-i="1"><span class="ic">&#10003;</span><span>Fingerprinting device</span></div>
-              <div class="row" data-i="2"><span class="ic">&#10003;</span><span>Resolving origin</span></div>
-              <div class="row" data-i="3"><span class="ic wait">&#9675;</span><span>Cross-referencing registry</span></div>
-              <div class="row" data-i="4"><span class="ic wait">&#9675;</span><span>Validating key signature</span></div>
-            </div>
-          </div>
-          <div class="bar"><i id="bar"></i></div>
-          <div class="origin">
-            <div><div class="l">Origin IP</div><div class="v acc" id="ip">&mdash;</div></div>
-            <div><div class="l">Location</div><div class="v" id="loc">Resolving&hellip;</div></div>
-            <div><div class="l">Network</div><div class="v" id="isp">&mdash;</div></div>
-            <div><div class="l">Session</div><div class="v" id="sid">&mdash;</div></div>
-          </div>
-          <div class="verdict" id="verdict">Verifying credentials&hellip;</div>
-        </div>
-      </div>
-    </main>
-
-    <footer>
-      <div id="fkey">Node 00</div>
-      <div>&copy; 2026</div>
-    </footer>
-  </div>
-
-<div id="ovl">
+              <div class="globe" id="globeSlot"><div id="ovl">
                 <div class="gset" id="gset">
                   <svg viewBox="0 0 200 200" aria-hidden="true">
                     <g transform="rotate(-16 100 100)">
@@ -266,7 +236,35 @@
                     </g>
                   </svg>
                 </div>
-</div>
+</div></div>
+              <div class="coords" id="coords"></div>
+            </div>
+            <div class="log" id="log">
+              <div class="row" data-i="0"><span class="ic">&#10003;</span><span>Establishing secure channel</span></div>
+              <div class="row" data-i="1"><span class="ic">&#10003;</span><span>Fingerprinting device</span></div>
+              <div class="row" data-i="2"><span class="ic">&#10003;</span><span>Resolving origin</span></div>
+              <div class="row" data-i="3"><span class="ic wait">&#9675;</span><span>Cross-referencing registry</span></div>
+              <div class="row" data-i="4"><span class="ic wait">&#9675;</span><span>Validating key signature</span></div>
+            </div>
+          </div>
+          <div class="bar"><i id="bar"></i></div>
+          <div class="origin">
+            <div><div class="l">Origin IP</div><div class="v acc" id="ip">&mdash;</div></div>
+            <div><div class="l">Location</div><div class="v" id="loc">Resolving&hellip;</div></div>
+            <div><div class="l">Network</div><div class="v" id="isp">&mdash;</div></div>
+            <div><div class="l">Session</div><div class="v" id="sid">&mdash;</div></div>
+          </div>
+          <div class="verdict" id="verdict">Verifying credentials&hellip;</div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div id="fkey">Node 00</div>
+      <div>&copy; 2026</div>
+    </footer>
+  </div>
+
 <script>
   /* ---------- starfield ---------- */
   (function(){
@@ -345,7 +343,7 @@
     "  vec3 tex=texture2D(uTex,uv).rgb;",
     "  tex=mix(tex,vec3(0.92,0.94,0.96),smoothstep(0.965,0.998,abs(n1.y)));",
     "  float luma=dot(tex,vec3(0.299,0.587,0.114));",
-    "  tex=mix(vec3(luma),tex,0.78)*vec3(0.80,0.89,1.04);",
+    "  tex=mix(vec3(luma),tex,0.86)*vec3(0.88,0.94,1.05);",
     "  float diff=dot(n,uSun);",
     "  float day=smoothstep(-0.28,0.38,diff);",
     "  float lonC=lon+uTime*0.005;",
@@ -368,7 +366,7 @@
     "  float haze=1.0-exp(-airmass*0.20);",
     "  vec3 hazeCol=mix(atmoThin,atmoDense,clamp(airmass*0.30,0.0,1.0))*(0.18+0.68*day);",
     "  col=mix(col,hazeCol,clamp(haze,0.0,0.65));",
-    "  col*=mix(1.06,0.95,uHero);",
+    "  col*=mix(1.10,1.16,uHero);",
     "  float cover=smoothstep(-1.1,-0.05,x);",
     "  col=mix(col,atmoLum,cover);",
     "  alpha=1.0;",
@@ -415,9 +413,10 @@
     loadTex(gl.TEXTURE0,0,EARTH_SRC,U.uTex,texDone);
     loadTex(gl.TEXTURE1,1,CLOUD_SRC,U.uCld,texDone);
     function resize(){
+      if(E.attached)return;
       E.dpr=Math.min(window.devicePixelRatio||1,2);
-      var w=window.innerWidth,h=window.innerHeight;
-      cv.width=Math.round(w*E.dpr);cv.height=Math.round(h*E.dpr);
+      cv.width=Math.round(window.innerWidth*E.dpr);
+      cv.height=Math.round(window.innerHeight*E.dpr);
     }
     resize();addEventListener('resize',resize);
     function heroParams(){
@@ -426,47 +425,72 @@
       var cap=Math.min(h*0.28,300);
       return {cx:w/2,cy:h+R-cap,R:R};
     }
+    function attachToSlot(){
+      var slot=document.getElementById('globeSlot');
+      cv.style.position='absolute';cv.style.inset='0';
+      cv.style.width='100%';cv.style.height='100%';cv.style.zIndex='1';
+      slot.insertBefore(cv,slot.firstChild);
+      E.attached=true;
+    }
+    function detachToScreen(){
+      var slot=document.getElementById('globeSlot');
+      var r=slot.getBoundingClientRect();
+      cv.style.position='fixed';cv.style.inset='0';
+      cv.style.width='100vw';cv.style.height='100vh';
+      document.body.appendChild(cv);
+      E.attached=false;
+      resize();
+      E.cx=r.left+r.width/2;E.cy=r.top+r.height/2;E.R=r.width*0.485;
+    }
+    E.attach=attachToSlot;E.detach=detachToScreen;
+    E.heroTo=function(){var hp=heroParams();return{cx:hp.cx,cy:hp.cy,R:hp.R,rot:E.rot+1.1,tilt:-1.02,spd:REDUCED?0:0.03,hF:1};};
     var last=null;
     function frame(ts){
       requestAnimationFrame(frame);
       if(!E.texReady)return;
       var dt=last==null?16:Math.min(50,ts-last);last=ts;
-      if(E.mode==='hero'){var hp=heroParams();E.cx=hp.cx;E.cy=hp.cy;E.R=hp.R;}
       if(E.tween){
-        var tw=E.tween,u=Math.min(1,(ts-tw.t0)/tw.dur);
+        var tw=E.tween,u=tw.dur<=0?1:Math.min(1,(ts-tw.t0)/tw.dur);
         var e=u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
         E.cx=tw.from.cx+(tw.to.cx-tw.from.cx)*e;
         E.cy=tw.from.cy+(tw.to.cy-tw.from.cy)*e;
         E.R=tw.from.R+(tw.to.R-tw.from.R)*e;
         E.rot=tw.from.rot+(tw.to.rot-tw.from.rot)*e;
         E.tilt=tw.from.tilt+(tw.to.tilt-tw.from.tilt)*e;
-        E.spd=tw.from.spd*(1-e);
-        E.heroF=1-e;
-        var sx=(E.cx-tw.from.cx)*0.12,sy=(E.cy-tw.from.cy)*0.12;
-        var st=document.getElementById('stars');
-        st.style.transform='translate('+sx.toFixed(1)+'px,'+sy.toFixed(1)+'px) scale('+(1-0.15*e).toFixed(3)+')';
-        if(u>=1){E.tween=null;E.mode='docked';if(tw.done)tw.done();}
+        E.spd=tw.from.spd+(tw.to.spd-tw.from.spd)*e;
+        E.heroF=tw.from.hF+(tw.to.hF-tw.from.hF)*e;
+        if(u>=1){var dn=tw.done;E.tween=null;E.mode=tw.endMode||'docked';if(dn)dn();}
+      }else if(E.mode==='hero'){
+        var hp=heroParams();E.cx=hp.cx;E.cy=hp.cy;E.R=hp.R;
+        E.rot+=E.spd*dt/1000;
       }else{
         E.rot+=E.spd*dt/1000;
       }
-      if(E.mode==='docked'){
-        var sl=document.getElementById('globeSlot').getBoundingClientRect();
-        var tx=sl.left+sl.width/2,ty=sl.top+sl.height/2,tr=sl.width*0.485;
-        E.cx+=(tx-E.cx)*0.25;E.cy+=(ty-E.cy)*0.25;E.R+=(tr-E.R)*0.25;
-        var o=document.getElementById('ovl');
-        o.style.left=sl.left+'px';o.style.top=sl.top+'px';
-        o.style.width=sl.width+'px';o.style.height=sl.height+'px';
+      var st=document.getElementById('stars');
+      if(E.heroF>0.999){if(st.style.transform)st.style.transform='';}
+      else{
+        var hp2=heroParams();
+        st.style.transform='translate('+((E.cx-hp2.cx)*0.12).toFixed(1)+'px,'+((E.cy-hp2.cy)*0.12).toFixed(1)+'px) scale('+(1-0.15*(1-E.heroF)).toFixed(3)+')';
       }
-      var gl=E.gl,w=window.innerWidth,h=window.innerHeight;
-      gl.viewport(0,0,E.cv.width,E.cv.height);
-      gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform2f(E.U.uRes,E.cv.width,E.cv.height);
-      gl.uniform2f(E.U.uC,E.cx*E.dpr,(h-E.cy)*E.dpr);
-      gl.uniform1f(E.U.uR,E.R*E.dpr);
+      E.deny+=(E.denyT-E.deny)*0.06;
+      var gl=E.gl;
+      if(E.attached){
+        var cw=cv.clientWidth||1,ch2=cv.clientHeight||1;
+        var pw=Math.round(cw*E.dpr),ph=Math.round(ch2*E.dpr);
+        if(cv.width!==pw||cv.height!==ph){cv.width=pw;cv.height=ph;}
+        gl.viewport(0,0,pw,ph);
+        gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform2f(E.U.uC,pw/2,ph/2);
+        gl.uniform1f(E.U.uR,cw*0.485*E.dpr);
+      }else{
+        gl.viewport(0,0,cv.width,cv.height);
+        gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform2f(E.U.uC,E.cx*E.dpr,(window.innerHeight-E.cy)*E.dpr);
+        gl.uniform1f(E.U.uR,E.R*E.dpr);
+      }
       gl.uniform1f(E.U.uRot,E.rot);
       gl.uniform1f(E.U.uTilt,E.tilt);
       gl.uniform3f(E.U.uSun,-0.574,0.324,0.752);
-      E.deny+=(E.denyT-E.deny)*0.06;
       gl.uniform1f(E.U.uDeny,E.deny);
       gl.uniform1f(E.U.uHero,E.heroF);
       gl.uniform1f(E.U.uTime,(ts%1e7)/1000);
@@ -475,17 +499,9 @@
     requestAnimationFrame(frame);
   })();
 
-  function placeOvl(){
-    var slot=document.getElementById('globeSlot').getBoundingClientRect();
-    var o=document.getElementById('ovl');
-    o.style.left=slot.left+'px';o.style.top=slot.top+'px';
-    o.style.width=slot.width+'px';o.style.height=slot.height+'px';
-    return slot;
-  }
-  addEventListener('resize',function(){if(document.body.classList.contains('flight'))placeOvl();});
   function dockEarth(d,done){
     if(!E.ok){if(done)done();return;}
-    var slot=placeOvl();
+    var slot=document.getElementById('globeSlot').getBoundingClientRect();
     var toRot=(d.lon!=null?d.lon:0)*Math.PI/180;
     var toTilt=-(d.lat!=null?d.lat:0)*Math.PI/180;
     // choose nearest equivalent rotation angle
@@ -494,10 +510,10 @@
     var cands=[base+toRot-2*Math.PI,base+toRot,base+toRot+2*Math.PI],best=cands[0];
     for(var i=1;i<3;i++)if(Math.abs(cands[i]-E.rot)<Math.abs(best-E.rot))best=cands[i];
     if(best<E.rot)best+=2*Math.PI; // keep spinning forward into the lock
-    E.tween={t0:performance.now(),dur:REDUCED?0:1900,
-      from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:E.spd},
-      to:{cx:slot.left+slot.width/2,cy:slot.top+slot.height/2,R:slot.width*0.485,rot:best,tilt:toTilt},
-      done:done};
+    E.tween={t0:performance.now(),dur:REDUCED?0:1900,endMode:'docked',
+      from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:E.spd,hF:E.heroF},
+      to:{cx:slot.left+slot.width/2,cy:slot.top+slot.height/2,R:slot.width*0.485,rot:best,tilt:toTilt,spd:0,hF:0},
+      done:function(){if(E.attach)E.attach();if(done)done();}};
   }
 
   /* ---------- overlay: uplink + coords ---------- */
@@ -537,7 +553,46 @@
 
   function showRow(i){var el=document.querySelector('.row[data-i="'+i+'"]');if(el)el.classList.add('show');}
 
+  function reverseToGate(){
+    if(E.reversing)return;E.reversing=true;
+    document.getElementById('gset').classList.remove('on');
+    if(pkRAF){cancelAnimationFrame(pkRAF);pkRAF=null;}
+    var pk=document.getElementById('pk');pk.setAttribute('opacity','0');
+    var arc=document.getElementById('arc');
+    arc.style.transition='none';arc.style.strokeDasharray='';arc.style.strokeDashoffset='';arc.style.stroke='';
+    arc.removeAttribute('d');
+    document.getElementById('relay').setAttribute('opacity','0');
+    if(E.ok&&E.detach)E.detach();
+    document.getElementById('auth').classList.remove('on');
+    document.getElementById('gate').style.display='';
+    var card=document.getElementById('card');
+    card.classList.remove('wide');card.classList.remove('denied');
+    document.getElementById('hero').classList.remove('gone');
+    document.getElementById('key').value='';
+    document.querySelectorAll('.row').forEach(function(r){r.classList.remove('show');});
+    document.querySelectorAll('.row .ic.wait').forEach(function(x){x.style.color='';x.style.animation='';x.textContent='\u25CB';});
+    var bar=document.getElementById('bar');bar.style.width='0';bar.classList.remove('deny');
+    var v=document.getElementById('verdict');v.classList.remove('deny');v.textContent='Verifying credentials\u2026';
+    document.getElementById('ip').textContent='\u2014';
+    document.getElementById('loc').textContent='Resolving\u2026';
+    document.getElementById('isp').textContent='\u2014';
+    document.getElementById('sid').textContent='\u2014';
+    document.getElementById('coords').innerHTML='';
+    document.getElementById('hstat').textContent='Secure';
+    document.getElementById('hbadge').classList.remove('denied');
+    document.getElementById('fkey').textContent='Node 00';
+    E.denyT=0;
+    function finish(){document.body.classList.remove('flight');E.busy=false;E.reversing=false;}
+    if(E.ok){
+      E.cv.style.zIndex='10';
+      E.tween={t0:performance.now(),dur:REDUCED?0:1700,endMode:'hero',
+        from:{cx:E.cx,cy:E.cy,R:E.R,rot:E.rot,tilt:E.tilt,spd:0,hF:0},
+        to:E.heroTo(),
+        done:function(){E.cv.style.zIndex='';finish();}};
+    }else{finish();}
+  }
   async function startAuth(){
+    if(E.busy||E.reversing)return;
     var keyEl=document.getElementById('key'),field=document.getElementById('field');
     if(!keyEl.value.trim()){
       field.classList.add('error');
@@ -545,6 +600,7 @@
       keyEl.focus();
       return;
     }
+    E.busy=true;
     document.getElementById('hero').classList.add('gone');
     document.body.classList.add('flight');
     document.getElementById('gate').style.display='none';
@@ -583,6 +639,7 @@
       document.getElementById('pk').setAttribute('opacity','0');
       document.getElementById('arc').style.stroke='rgba(255,95,95,.45)';
       document.querySelectorAll('.row .ic.wait').forEach(function(x){x.style.color='var(--red)';x.style.animation='none';x.textContent='×';});
+      setTimeout(reverseToGate,3400);
     },4100);
   }
 </script>
