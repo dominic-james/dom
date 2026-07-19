@@ -455,6 +455,8 @@
         var e=u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2;
         if(tw.mid){
           var uc=tw.uc;
+          if(tw.trackSlot&&tw.swapped){var g=document.getElementById('globeSlot').getBoundingClientRect();
+            if(g.width){tw.to.cx=g.left+g.width/2;tw.to.cy=g.top+g.height/2;tw.to.R=g.width*0.485;}}
           E.cx=lag3(tw.from.cx,tw.mid.cx,tw.to.cx,uc,e);
           E.cy=lag3(tw.from.cy,tw.mid.cy,tw.to.cy,uc,e);
           E.R=lag3(tw.from.R,tw.mid.R,tw.to.R,uc,e);
@@ -697,12 +699,12 @@
       swapToAuth(data);
       startAuthTimeline(data);
       measureSlot();
-      setTimeout(measureSlot,560);
     },'docked',function(){
       if(E.attach)E.attach();
       showOverlay(data);
       rollCoords(data,1000);
     });
+    E.tween.trackSlot=true;
   }
 </script>
 </body>
